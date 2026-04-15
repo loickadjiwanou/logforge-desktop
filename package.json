@@ -1,0 +1,85 @@
+{
+  "name": "logforge-desktop",
+  "version": "0.2.0",
+  "description": "LogForge Desktop — Self-hosted log management and observability platform",
+  "author": {
+    "name": "LogForge Inc.",
+    "email": "loick.adj@gmail.com",
+    "url": "https://github.com/loickadjiwanou"
+  },
+  "main": "electron/main.js",
+  "private": true,
+  "scripts": {
+    "dev": "electron .",
+    "build:frontend": "cd ../logforge-frontend && yarn build",
+    "build": "yarn build:frontend && electron-builder",
+    "dist:mac": "yarn build:frontend && electron-builder --mac",
+    "dist:win": "yarn build:frontend && electron-builder --win",
+    "dist:linux": "yarn build:frontend && electron-builder --linux"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0",
+    "electron-builder": "^24.0.0"
+  },
+  "build": {
+    "appId": "com.logforge.desktop",
+    "productName": "LogForge",
+    "copyright": "Copyright © 2026 LogForge Inc. All rights reserved.",
+    "icon": "assets/icon.png",
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist"
+    },
+    "files": [
+      "electron/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../logforge-frontend/build",
+        "to": "frontend"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "identity": null,
+      "entitlementsInherit": "assets/entitlements.mac.plist",
+      "target": [
+        { "target": "dmg", "arch": ["x64", "arm64"] }
+      ]
+    },
+    "dmg": {
+      "title": "LogForge ${version}",
+      "window": { "width": 540, "height": 380 },
+      "contents": [
+        { "x": 130, "y": 190 },
+        { "x": 410, "y": 190, "type": "link", "path": "/Applications" }
+      ]
+    },
+    "win": {
+      "publisherName": "Loick Adjiwanou",
+      "target": [
+        { "target": "nsis", "arch": ["x64"] }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "LogForge"
+    },
+    "linux": {
+      "category": "Development",
+      "desktop": {
+        "Name": "LogForge",
+        "Comment": "Self-hosted log management and observability platform",
+        "Categories": "Development;Utility;Monitor;"
+      },
+      "target": [
+        { "target": "AppImage", "arch": ["x64"] }
+      ]
+    }
+  }
+}
