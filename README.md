@@ -129,8 +129,8 @@ yarn dist:mac
 **Output:**
 ```
 dist/
-├── LogForge-2.0.0.dmg          # Universal installer
-├── LogForge-2.0.0-arm64.dmg    # Apple Silicon specific (if built separately)
+├── LogForge-0.2.0.dmg          # Universal installer
+├── LogForge-0.2.0-arm64.dmg    # Apple Silicon specific (if built separately)
 └── mac/
     └── LogForge.app            # Extracted app bundle
 ```
@@ -172,11 +172,11 @@ yarn dist:win
 **Output:**
 ```
 dist/
-└── LogForge Setup 2.0.0.exe    # NSIS installer
+└── LogForge Setup 0.2.0.exe    # NSIS installer
 ```
 
 **Installation:**
-1. Run `LogForge Setup 2.0.0.exe`
+1. Run `LogForge Setup 0.2.0.exe`
 2. The installer lets the user choose the installation directory
 3. Creates a desktop shortcut and a Start Menu entry
 
@@ -199,23 +199,23 @@ yarn dist:linux
 **Output:**
 ```
 dist/
-└── LogForge-2.0.0.AppImage     # Portable executable
+└── LogForge-0.2.0.AppImage     # Portable executable
 ```
 
 **Usage:**
 ```bash
 # Make executable (first time only)
-chmod +x LogForge-2.0.0.AppImage
+chmod +x LogForge-0.2.0.AppImage
 
 # Run
-./LogForge-2.0.0.AppImage
+./LogForge-0.2.0.AppImage
 ```
 
 **Optional — Desktop integration:**
 
 ```bash
 # Mount and install desktop entry
-./LogForge-2.0.0.AppImage --appimage-extract
+./LogForge-0.2.0.AppImage --appimage-extract
 # The extracted app can then be moved to /opt/logforge
 ```
 
@@ -230,10 +230,18 @@ Or use `AppImageLauncher` for automatic system integration (adds to app menu, ha
 ### All platforms at once
 
 ```bash
-yarn build
+npx electron-builder --mac --win --linux
 ```
 
-Builds the frontend once, then packages for all platforms configured in `package.json`. Best run in a CI environment with all platform tools available.
+Packages for all three platforms in a single command. The frontend build must already exist in `../logforge-frontend/build` — run `yarn build` in `logforge-frontend` first if needed.
+
+To rebuild the frontend and package all platforms in one step:
+
+```bash
+yarn build:frontend && npx electron-builder --mac --win --linux
+```
+
+Best run in a CI environment with all platform tools available.
 
 ---
 
