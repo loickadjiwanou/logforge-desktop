@@ -188,21 +188,24 @@ dist/
 
 ---
 
-### Linux — AppImage
+### Linux — AppImage / DEB
 
-Produces a self-contained `.AppImage` for **x64** Linux. No installation required — the file is executable directly.
+Two formats are available for Linux:
 
-```bash
-yarn dist:linux
-```
+| Format | Command | Best for |
+|---|---|---|
+| AppImage only | `yarn dist:linux:appimage` | Universal, no install needed |
+| DEB only | `yarn dist:linux:deb` | Ubuntu / Debian (native package) |
+| Both | `yarn dist:linux` | Distribute both at once |
 
 **Output:**
 ```
 dist/
-└── LogForge-0.2.0.AppImage     # Portable executable
+├── LogForge-0.2.0.AppImage       # Portable — runs on any x64 Linux
+└── LogForge-0.2.0.amd64.deb      # Debian/Ubuntu package
 ```
 
-**Usage:**
+**AppImage usage:**
 ```bash
 # Make executable (first time only)
 chmod +x LogForge-0.2.0.AppImage
@@ -211,15 +214,14 @@ chmod +x LogForge-0.2.0.AppImage
 ./LogForge-0.2.0.AppImage
 ```
 
-**Optional — Desktop integration:**
+> **Note:** AppImage requires FUSE on some systems. If you get a FUSE error, either install it (`sudo apt install libfuse2`) or use the `.deb` instead.
 
+**DEB installation (Ubuntu/Debian):**
 ```bash
-# Mount and install desktop entry
-./LogForge-0.2.0.AppImage --appimage-extract
-# The extracted app can then be moved to /opt/logforge
+sudo dpkg -i LogForge-0.2.0.amd64.deb
 ```
 
-Or use `AppImageLauncher` for automatic system integration (adds to app menu, handles updates).
+The app appears automatically in the application menu after installation.
 
 **Requirements:**
 - Must be built on **Linux** for best compatibility
@@ -230,16 +232,10 @@ Or use `AppImageLauncher` for automatic system integration (adds to app menu, ha
 ### All platforms at once
 
 ```bash
-npx electron-builder --mac --win --linux
+yarn dist:all
 ```
 
-Packages for all three platforms in a single command. The frontend build must already exist in `../logforge-frontend/build` — run `yarn build` in `logforge-frontend` first if needed.
-
-To rebuild the frontend and package all platforms in one step:
-
-```bash
-yarn build:frontend && npx electron-builder --mac --win --linux
-```
+Packages for all three platforms in a single command (macOS DMG, Windows EXE, Linux AppImage + DEB). Automatically builds the frontend first.
 
 Best run in a CI environment with all platform tools available.
 
